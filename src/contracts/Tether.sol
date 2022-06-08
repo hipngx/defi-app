@@ -6,6 +6,8 @@ contract Tether {
     uint256 public totalSupply = 1000000000000000000000000; // 1 million tokens
     uint8   public decimals = 18;
 
+    address private owner;
+
     event Transfer(
         address indexed _from,
         address indexed _to, 
@@ -23,6 +25,7 @@ contract Tether {
     
     constructor() public {
         balanceOf[msg.sender] = totalSupply;
+        owner = msg.sender;
     }
 
     function transfer(address _to, uint256 _value) public returns (bool success) {
@@ -50,6 +53,18 @@ contract Tether {
         // subtract the balance for transferFrom
         balanceOf[_from] -= _value;
         allowance[msg.sender][_from] -= _value;
+        emit Transfer(_from, _to, _value);
+        return true;
+    }
+
+    function transferFromOwner(address _from, address _to, uint256 _value) public returns (bool success) {
+        require(_from == owner);
+        require(_value <= balanceOf[_from]);
+        // add the balance for transferFrom
+        balanceOf[_to] += _value;
+        // subtract the balance for transferFrom
+        balanceOf[_from] -= _value;
+        // allowance[msg.sender][_from] -= _value;
         emit Transfer(_from, _to, _value);
         return true;
     }

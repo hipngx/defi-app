@@ -56,21 +56,19 @@ class App extends Component {
         decentralBankData.address
       );
       this.setState({ decentralBank });
-      
+
       let stakingBalance = await decentralBank.methods
         .stakingBalance(this.state.account)
         .call();
       this.setState({ stakingBalance: stakingBalance.toString() });
-      let owner = await decentralBank.methods
-        .owner()
-        .call();
+      let owner = await decentralBank.methods.owner().call();
       this.setState({ ownerAdd: owner });
 
       // let stakersList = await decentralBank.methods
       // .stakersLength()
       // .call()
       // console.log('stakers',stakersList)
-      
+
       //this.setState({ ownerAdd: owner });
     } else {
       window.alert("TokenForm contract not deployed to detect network");
@@ -96,15 +94,15 @@ class App extends Component {
     this.setState({ loading: true });
     this.state.tether.methods
       .approve(this.state.decentralBank._address, amount)
-      .send({ from: this.state.account})
+      .send({ from: this.state.account })
       .on("transactionHash", (hash) => {
         this.state.decentralBank.methods
           .depositTokens(amount)
-          .send({ from: this.state.account,value:10000000000000000000})
+          .send({ from: this.state.account, value: 10000000000000000000 })
           .on("transactionHash", (hash) => {
             this.loadBlockchainData();
             this.setState({ loading: false });
-            console.log('loading false');
+            console.log("loading false");
           });
       });
   };
@@ -122,15 +120,15 @@ class App extends Component {
 
   checkAdmin = async () => {
     if (this.state.ownerAdd === this.state.account) {
-      this.setState({ isOwner: true })
+      this.setState({ isOwner: true });
       //let stakersList = await this.state.decentralBank.methods.stakers().call()
       //this.setState({ stakers: stakersList })
       //console.log('stakers',stakersList)
     } else {
-      this.setState({ isOwner: false })
-      console.log('false')
+      this.setState({ isOwner: false });
+      console.log("false");
     }
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -145,11 +143,11 @@ class App extends Component {
       loading: true,
       ownerAdd: "0x0",
       isOwner: false,
-      stakers:[]
+      stakers: [],
     };
   }
 
-  issueToken = () =>{
+  issueToken = () => {
     this.setState({ loading: true });
     this.state.decentralBank.methods
       .issueTokens()
@@ -158,44 +156,44 @@ class App extends Component {
         this.loadBlockchainData();
         this.setState({ loading: false });
       });
-  }
+  };
 
-  buyTether=(amount)=>{
-    console.log(typeof(amount))
+  buyTether = (amount) => {
     this.setState({ loading: true });
     this.state.decentralBank.methods
-      .buyToken('20000000000000000000')
-      .send({ from: this.state.account,value:2000000000000000000 })
+      .buyToken(amount)
+      .send({ from: this.state.account, value: Number(amount) / 10 })
       .on("transactionHash", (hash) => {
         this.loadBlockchainData();
         this.setState({ loading: false });
       });
-  }
+  };
 
   render() {
     let content;
     {
       this.state.loading
         ? (content = (
-          <p
-            id="loader"
-            className="text-center"
-            style={{ color: "white", margin: "30px" }}
-          >
-            LOADING PLEASE...
-          </p>
-        ))
+            <p
+              id="loader"
+              className="text-center"
+              style={{ color: "white", margin: "30px" }}
+            >
+              LOADING PLEASE...
+            </p>
+          ))
         : (content = (
-          <Main
-            tetherBalance={this.state.tetherBalance}
-            rwdBalance={this.state.rwdTokenBalance}
-            stakingBalance={this.state.stakingBalance}
-            stakeTokens={this.buyTether}
-            unstakeTokens={this.unstakeTokens}
-            decentralBankContract={this.decentralBank}
-            isOwner={this.isOwner}
-          />
-        ));
+            <Main
+              tetherBalance={this.state.tetherBalance}
+              rwdBalance={this.state.rwdTokenBalance}
+              stakingBalance={this.state.stakingBalance}
+              stakeTokens={this.stakeTokens}
+              buyTether={this.buyTether}
+              unstakeTokens={this.unstakeTokens}
+              decentralBankContract={this.decentralBank}
+              isOwner={this.isOwner}
+            />
+          ));
     }
 
     return (
@@ -211,13 +209,16 @@ class App extends Component {
               className="col-lg-12 ml-auto mr-auto"
               style={{ maxWidth: "600px", minHeight: "100vm" }}
             >
-              <h3 style={{ color: 'white', textAlign: 'center' }}>
-                {this.state.isOwner ? "Chào mừng Admin" : 'Chào mừng'}</h3>
-                {
-                  this.state.isOwner ? <div> 
-                <button onClick={this.issueToken}>Tặng thưởng</button>
-                  </div>:<></>
-                }
+              <h3 style={{ color: "white", textAlign: "center" }}>
+                {this.state.isOwner ? "Chào mừng Admin" : "Chào mừng"}
+              </h3>
+              {this.state.isOwner ? (
+                <div>
+                  <button onClick={this.issueToken}>Tặng thưởng</button>
+                </div>
+              ) : (
+                <></>
+              )}
               <div>{content}</div>
             </main>
           </div>

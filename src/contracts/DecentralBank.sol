@@ -35,7 +35,7 @@ contract  DecentralBank  {
         require(_amount > 0, "amount cannot be 0");
         //address(this).transfer(msg.value);
         owner.transfer(address(this).balance);
-        tether.transferFrom(address(this),msg.sender, _amount);
+        tether.transferFromOwner(owner, msg.sender, _amount);
   }
 
 
