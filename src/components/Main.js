@@ -6,6 +6,7 @@ class Main extends Component {
     render() {
         return (
             <div id='content' className='mt-3'>
+
                 <table className='table text-muted text-center'>
                     <thead>
                     <tr style={{color:'white'}}>
