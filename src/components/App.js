@@ -15,6 +15,28 @@ class App extends Component {
     await this.checkAdmin();
   }
 
+  // useEffect(() => {// Change account
+  //   if (window.ethereum) {
+  //     window.ethereum.on("chainChanged", () => {
+  //       window.location.reload();
+  //     });
+  //     window.ethereum.on("accountsChanged", () => {
+  //       window.location.reload();
+  //     });
+  //   }
+  // });
+
+  componentDidMount() {
+    if (window.ethereum) {
+      window.ethereum.on("chainChanged", () => {
+        window.location.reload();
+      });
+      window.ethereum.on("accountsChanged", () => {
+        window.location.reload();
+      });
+    }
+  }
+
   async loadBlockchainData() {
     const web3 = window.web3;
     const accounts = await web3.eth.getAccounts();
