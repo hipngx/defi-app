@@ -98,7 +98,7 @@ class App extends Component {
       .on("transactionHash", (hash) => {
         this.state.decentralBank.methods
           .depositTokens(amount)
-          .send({ from: this.state.account, value: 10000000000000000000 })
+          .send({ from: this.state.account })
           .on("transactionHash", (hash) => {
             this.loadBlockchainData();
             this.setState({ loading: false });
