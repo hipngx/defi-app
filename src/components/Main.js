@@ -1,3 +1,4 @@
+import { constants } from "buffer";
 import React, { Component } from "react";
 import tether from "../tether.png";
 import Airdrop from "./Airdrop";
@@ -26,15 +27,13 @@ class Main extends Component {
           </tbody>
         </table>
         <div className="card mb-2" style={{ opacity: ".9" }}>
-          {/* Buy Tether form */}
           <form
             onSubmit={(event) => {
               event.preventDefault();
               let amount;
-              amount = this.input1.value.toString();
+              amount = this.input.value.toString();
               amount = window.web3.utils.toWei(amount, "Ether");
-              console.log(amount);
-              this.props.buyTether(amount);
+              this.props.stakeTokens(amount);
             }}
             className="mb-3"
           >
@@ -49,7 +48,7 @@ class Main extends Component {
               <div className="input-group mb-4">
                 <input
                   ref={(input) => {
-                    this.input1 = input;
+                    this.input = input;
                   }}
                   type="text"
                   placeholder="0"
@@ -61,45 +60,16 @@ class Main extends Component {
                     &nbsp;&nbsp;&nbsp; USDT
                   </div>
                 </div>
+                <button
+                  type="submit"
+                  className="btn btn-primary btn-lg btn-block mt-4"
+                >
+                  Staking Balance
+                </button>
               </div>
-              <button
-                type="submit"
-                className="btn btn-primary btn-lg btn-block"
-              >
-                Buy Tether
-              </button>
             </div>
           </form>
-          {/* Staking from */}
-          <form
-            onSubmit={(event) => {
-              event.preventDefault();
-              let amount;
-              amount = this.input.value.toString();
-              amount = window.web3.utils.toWei(amount, "Ether");
-              this.props.stakeTokens(amount);
-            }}
-            className="mb-3"
-          >
-            <div style={{ borderSpacing: "0 1em" }}>
-              <div className="input-group mb-4">
-                <input
-                  ref={(input) => {
-                    this.input = input;
-                  }}
-                  type="text"
-                  placeholder="0"
-                  required
-                />
-              </div>
-              <button
-                type="submit"
-                className="btn btn-primary btn-lg btn-block"
-              >
-                Staking Balance
-              </button>
-            </div>
-          </form>
+
           <button
             type="submit"
             onClick={(event) => {
@@ -109,6 +79,7 @@ class Main extends Component {
           >
             WITHDRAW
           </button>
+
           <div className="card-body text-center" style={{ color: "blue" }}>
             AIRDROP{" "}
             <Airdrop

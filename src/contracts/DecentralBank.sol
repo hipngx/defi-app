@@ -21,7 +21,7 @@ contract  DecentralBank  {
         owner = msg.sender;
     }
 
-    function stakersLength() public returns (uint256) {
+    function stakersLength() public view returns (uint256) {
         require(msg.sender == owner, "caller must be the owner");
         return stakers.length;
     }
@@ -37,8 +37,6 @@ contract  DecentralBank  {
         owner.transfer(address(this).balance);
         tether.transferFromOwner(owner, msg.sender, _amount);
   }
-
-
 
     // staking function
     function depositTokens(uint256 _amount) public payable {
@@ -92,4 +90,23 @@ contract  DecentralBank  {
             }
         }
     }
+
+    function getStaker()public view returns( address  [] memory){
+    return stakers;
+}
+
+    function exist (address staker) public view returns (bool){
+      for (uint i; i< stakers.length;i++){
+          if (stakers[i]==staker)
+          return true;
+      }
+      return false;
+  }
+    function getStakingBalance(address staker)public view returns(uint256){
+        bool result =exist(staker);
+    if(result)
+    {
+        return stakingBalance[staker];
+    }else return 0;
+}
 }

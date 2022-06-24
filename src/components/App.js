@@ -3,6 +3,7 @@ import Navbar from "./Navbar";
 import Web3 from "web3";
 import "./App.css";
 import Main from "./Main";
+import Admin from "./Admin";
 import Tether from "../truffle_abis/Tether.json";
 import RWD from "../truffle_abis/RWD.json";
 import DecentralBank from "../truffle_abis/DecentralBank.json";
@@ -13,6 +14,8 @@ class App extends Component {
     await this.loadWeb3();
     await this.loadBlockchainData();
     await this.checkAdmin();
+    await this.loadAdminData();
+    this.setState({ loading: false });
   }
 
   // useEffect(() => {// Change account
@@ -40,7 +43,7 @@ class App extends Component {
   async loadBlockchainData() {
     const web3 = window.web3;
     const accounts = await web3.eth.getAccounts();
-    console.log(accounts);
+    // console.log(accounts);
     this.setState({ account: accounts[0] });
     const networkId = await web3.eth.net.getId();
 
@@ -124,7 +127,6 @@ class App extends Component {
           .on("transactionHash", (hash) => {
             this.loadBlockchainData();
             this.setState({ loading: false });
-            console.log("loading false");
           });
       });
   };
@@ -148,7 +150,32 @@ class App extends Component {
       //console.log('stakers',stakersList)
     } else {
       this.setState({ isOwner: false });
-      console.log("false");
+    }
+  };
+
+  loadAdminData = async () => {
+    this.setState({ loading: true });
+    let stakerArray = [];
+    if (this.state.isOwner) {
+      const stakers = await this.state.decentralBank.methods.getStaker().call();
+      if (stakers.length !== 0) {
+        for (const staker of stakers) {
+          const getStakingBalance = await this.state.decentralBank.methods
+            .getStakingBalance(staker.toString())
+            .call();
+
+          stakerArray.push({
+            address: staker.toString(),
+            amount: window.web3.utils.fromWei(getStakingBalance),
+          });
+          // this.stakers.push({
+          //   address: staker.toString(),
+          //   amount: window.web3.utils.fromWei(getStakingBalance),
+          // });
+        }
+      }
+      this.setState({ stakerArray });
+      console.log("stakers state", this.state.stakerArray);
     }
   };
 
@@ -165,7 +192,7 @@ class App extends Component {
       loading: true,
       ownerAdd: "0x0",
       isOwner: false,
-      stakers: [],
+      stakerArray: [],
     };
   }
 
@@ -193,6 +220,7 @@ class App extends Component {
 
   render() {
     let content;
+    let admin;
     {
       this.state.loading
         ? (content = (
@@ -213,7 +241,35 @@ class App extends Component {
               buyTether={this.buyTether}
               unstakeTokens={this.unstakeTokens}
               decentralBankContract={this.decentralBank}
-              isOwner={this.isOwner}
+              isOwner={this.state.isOwner}
+              stakerArray={this.state.stakerArray}
+            />
+          ));
+    }
+
+    {
+      this.state.loading
+        ? (admin = (
+            <p
+              id="loader"
+              className="text-center"
+              style={{ color: "white", margin: "30px" }}
+            >
+              LOADING PLEASE...
+            </p>
+          ))
+        : (admin = (
+            <Admin
+              tetherBalance={this.state.tetherBalance}
+              rwdBalance={this.state.rwdTokenBalance}
+              stakingBalance={this.state.stakingBalance}
+              stakeTokens={this.stakeTokens}
+              buyTether={this.buyTether}
+              unstakeTokens={this.unstakeTokens}
+              decentralBankContract={this.decentralBank}
+              isOwner={this.state.isOwner}
+              stakerArray={this.state.stakerArray}
+              issueToken={this.issueToken}
             />
           ));
     }
@@ -234,14 +290,7 @@ class App extends Component {
               <h3 style={{ color: "white", textAlign: "center" }}>
                 {this.state.isOwner ? "Chào mừng Admin" : "Chào mừng"}
               </h3>
-              {this.state.isOwner ? (
-                <div>
-                  <button onClick={this.issueToken}>Tặng thưởng</button>
-                </div>
-              ) : (
-                <></>
-              )}
-              <div>{content}</div>
+              <div>{this.state.isOwner ? admin : content}</div>
             </main>
           </div>
         </div>
