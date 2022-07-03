@@ -18,18 +18,8 @@ class App extends Component {
     this.setState({ loading: false });
   }
 
-  // useEffect(() => {// Change account
-  //   if (window.ethereum) {
-  //     window.ethereum.on("chainChanged", () => {
-  //       window.location.reload();
-  //     });
-  //     window.ethereum.on("accountsChanged", () => {
-  //       window.location.reload();
-  //     });
-  //   }
-  // });
-
   componentDidMount() {
+    // change when account change
     if (window.ethereum) {
       window.ethereum.on("chainChanged", () => {
         window.location.reload();
@@ -43,7 +33,6 @@ class App extends Component {
   async loadBlockchainData() {
     const web3 = window.web3;
     const accounts = await web3.eth.getAccounts();
-    // console.log(accounts);
     this.setState({ account: accounts[0] });
     const networkId = await web3.eth.net.getId();
 
@@ -81,24 +70,15 @@ class App extends Component {
         decentralBankData.address
       );
       this.setState({ decentralBank });
-
       let stakingBalance = await decentralBank.methods
         .stakingBalance(this.state.account)
         .call();
       this.setState({ stakingBalance: stakingBalance.toString() });
       let owner = await decentralBank.methods.owner().call();
       this.setState({ ownerAdd: owner });
-
-      // let stakersList = await decentralBank.methods
-      // .stakersLength()
-      // .call()
-      // console.log('stakers',stakersList)
-
-      //this.setState({ ownerAdd: owner });
     } else {
       window.alert("TokenForm contract not deployed to detect network");
     }
-
     this.setState({ loading: false });
   }
 
@@ -145,9 +125,6 @@ class App extends Component {
   checkAdmin = async () => {
     if (this.state.ownerAdd === this.state.account) {
       this.setState({ isOwner: true });
-      //let stakersList = await this.state.decentralBank.methods.stakers().call()
-      //this.setState({ stakers: stakersList })
-      //console.log('stakers',stakersList)
     } else {
       this.setState({ isOwner: false });
     }
@@ -163,15 +140,10 @@ class App extends Component {
           const getStakingBalance = await this.state.decentralBank.methods
             .getStakingBalance(staker.toString())
             .call();
-
           stakerArray.push({
             address: staker.toString(),
             amount: window.web3.utils.fromWei(getStakingBalance),
           });
-          // this.stakers.push({
-          //   address: staker.toString(),
-          //   amount: window.web3.utils.fromWei(getStakingBalance),
-          // });
         }
       }
       this.setState({ stakerArray });
