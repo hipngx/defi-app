@@ -227,7 +227,7 @@ class App extends Component {
             <p
               id="loader"
               className="text-center"
-              style={{ color: "white", margin: "30px" }}
+              style={{ color: "white", marginTop: "5rem" }}
             >
               LOADING PLEASE...
             </p>
@@ -253,7 +253,7 @@ class App extends Component {
             <p
               id="loader"
               className="text-center"
-              style={{ color: "white", margin: "30px" }}
+              style={{ color: "white", marginTop: "5rem" }}
             >
               LOADING PLEASE...
             </p>
@@ -285,11 +285,8 @@ class App extends Component {
             <main
               role="main"
               className="col-lg-12 ml-auto mr-auto"
-              style={{ maxWidth: "600px", minHeight: "100vm" }}
+              style={{ maxWidth: "700px", minHeight: "100vm" }}
             >
-              <h3 style={{ color: "white", textAlign: "center" }}>
-                {this.state.isOwner ? "Chào mừng Admin" : "Chào mừng"}
-              </h3>
               <div>{this.state.isOwner ? admin : content}</div>
             </main>
           </div>
