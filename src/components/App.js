@@ -104,10 +104,20 @@ class App extends Component {
         this.state.decentralBank.methods
           .depositTokens(amount)
           .send({ from: this.state.account })
-          .on("transactionHash", (hash) => {
-            this.loadBlockchainData();
+          .on("transactionHash", async (hash) => {
+            await this.loadBlockchainData();
+            this.setState({ loading: false });
+          })
+          .on("error", (err) => {
+            console.log("err", err);
+            window.alert("error when transaction. Code: ", err.code.toString());
             this.setState({ loading: false });
           });
+      })
+      .on("error", (err) => {
+        console.log("err", err);
+        window.alert("error when transaction. Code: ", err.code.toString());
+        this.setState({ loading: false });
       });
   };
 
