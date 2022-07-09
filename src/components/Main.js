@@ -51,7 +51,7 @@ class Main extends Component {
                   <b>Stake Tokens</b>
                 </label>
                 <span className="float-right" style={{ marginRight: "8px" }}>
-                  Balance:{" "}
+                  Your Tether Balance:{" "}
                   {window.web3.utils.fromWei(this.props.tetherBalance, "Ether")}
                 </span>
                 <div className="input-group mb-4">
@@ -75,8 +75,12 @@ class Main extends Component {
                     type="submit"
                     className="btn btn-primary btn-lg btn-block mt-4 button m-a col-8"
                   >
-                    Deposit
+                    DEPOSIT
                   </button>
+                  <div className="text-center" style={{ color: "black " }}>
+                    By staking your Tether, you're earning the usual rewards
+                    from RWD with 11%/month
+                  </div>
                 </div>
               </div>
             </form>
@@ -91,14 +95,14 @@ class Main extends Component {
               WITHDRAW
             </button>
 
-            <div className="card-body text-center" style={{ color: "blue" }}>
+            {/* <div className="card-body text-center" style={{ color: "blue" }}>
               AIRDROP{" "}
-              {/* <Airdrop
+              <Airdrop
                 stakingBalance={this.props.stakingBalance}
                 decentralBankContract={this.props.decentralBankContract}
                 issueToken={this.props.issueToken}
-              /> */}
-            </div>
+              />
+            </div> */}
           </div>
         </div>
       </>
