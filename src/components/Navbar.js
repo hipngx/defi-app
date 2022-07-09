@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import bank from "../bank.png";
+import bank from "../logo.png";
 import "./Navbar.css";
 
 class Navbar extends Component {
@@ -16,7 +16,7 @@ class Navbar extends Component {
           {" "}
           <img
             src={bank}
-            width="50"
+            width="30"
             height="30"
             className="d-inline-block align-top navBankImg"
             alt="bank"

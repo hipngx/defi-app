@@ -75,7 +75,7 @@ class Main extends Component {
                     type="submit"
                     className="btn btn-primary btn-lg btn-block mt-4 button m-a col-8"
                   >
-                    Staking Balance
+                    Deposit
                   </button>
                 </div>
               </div>
@@ -96,6 +96,7 @@ class Main extends Component {
               <Airdrop
                 stakingBalance={this.props.stakingBalance}
                 decentralBankContract={this.props.decentralBankContract}
+                issueToken={this.props.issueToken}
               />
             </div>
           </div>

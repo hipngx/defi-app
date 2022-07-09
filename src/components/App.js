@@ -27,6 +27,13 @@ class App extends Component {
       window.ethereum.on("accountsChanged", () => {
         window.location.reload();
       });
+      window.ethereum.on("message", (message) => {
+        window.location.reload();
+        console.log("message", message);
+      });
+      window.ethereum.on("error", (error) => {
+        console.log("errorrrr", error);
+      });
     }
   }
 
@@ -190,14 +197,14 @@ class App extends Component {
   };
 
   buyTether = (amount) => {
-    this.setState({ loading: true });
-    this.state.decentralBank.methods
-      .buyToken(amount)
-      .send({ from: this.state.account, value: Number(amount) / 10 })
-      .on("transactionHash", (hash) => {
-        this.loadBlockchainData();
-        this.setState({ loading: false });
-      });
+    // this.setState({ loading: true });
+    // this.state.decentralBank.methods
+    //   .buyToken(amount)
+    //   .send({ from: this.state.account, value: Number(amount) / 10 })
+    //   .on("transactionHash", (hash) => {
+    //     this.loadBlockchainData();
+    //     this.setState({ loading: false });
+    //   });
   };
 
   render() {
@@ -222,9 +229,10 @@ class App extends Component {
               stakeTokens={this.stakeTokens}
               buyTether={this.buyTether}
               unstakeTokens={this.unstakeTokens}
-              decentralBankContract={this.decentralBank}
+              decentralBankContract={this.state.decentralBank}
               isOwner={this.state.isOwner}
               stakerArray={this.state.stakerArray}
+              issueToken={this.issueToken}
             />
           ));
     }
