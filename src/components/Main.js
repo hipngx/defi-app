@@ -93,11 +93,11 @@ class Main extends Component {
 
             <div className="card-body text-center" style={{ color: "blue" }}>
               AIRDROP{" "}
-              <Airdrop
+              {/* <Airdrop
                 stakingBalance={this.props.stakingBalance}
                 decentralBankContract={this.props.decentralBankContract}
                 issueToken={this.props.issueToken}
-              />
+              /> */}
             </div>
           </div>
         </div>
